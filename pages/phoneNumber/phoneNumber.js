@@ -34,7 +34,7 @@ Page({
       openid: wx.getStorageSync('openid')
     }
     post('/api/user', params).then(() => {
-      wx.setStorageSync('iphoneNumber', this.data.formData.userPhone)
+      wx.setStorageSync('phoneNumber', this.data.formData.userPhone)
       wx.showToast({
         title: '保存成功',
         icon: "success"
