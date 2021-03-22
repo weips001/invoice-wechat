@@ -1,0 +1,26 @@
+<view class="wrap">
+  <view wx:for="{{list}}" wx:key="id" class="item">
+      <view class="time">
+        <text>{{item.createTime}}</text>
+      </view>
+      <view class="info">
+        <text>发票代码：{{item.billCode}}</text>
+      </view>
+      <view class="info">
+        <text>发票号码：{{item.billNumber}}</text>
+      </view>
+      <view class="info">
+        <text>发票金额：{{item.money}}（不含税）</text>
+      </view>
+      <view class="info">
+        <text>开票日期：{{item.billDate}}</text>
+      </view>
+      <view class="info">
+        <text>校验码：{{item.checkCode}}</text>
+      </view>
+      <view class="info">
+        <text>价税合计：{{item.money}}</text>
+      </view>
+  </view>
+  <!-- <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">查看更多</button> -->
+</view>

@@ -1,0 +1,9 @@
+/* pages/result/result.wxss */
+.text {
+  font-size: 10px;
+}
+
+.btn {
+  margin: 30rpx 0 0;
+  width: 80%!important;
+}

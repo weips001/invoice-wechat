@@ -1,0 +1,12 @@
+<mp-toptips msg="{{error}}" type="error" show="{{error}}"></mp-toptips>
+<mp-form id="form" rules="{{rules}}" models="{{formData}}">
+  <mp-cells title="加入团队">
+    <mp-cell prop="userName" title="姓名：" ext-class="">
+      <input bindinput="formInputChange" data-field="userName" class="weui-input" placeholder="请输入姓名"/>
+    </mp-cell>
+    <mp-cell prop="code" title="公司邀请码：" ext-class="">
+      <input bindinput="formInputChange" data-field="code" class="weui-input" placeholder="请输入公司邀请码"/>
+    </mp-cell>
+  </mp-cells>
+  <button class="createBtn" type="primary" loading="{{loading}}" bindtap="joinCompany">加入团队</button>
+</mp-form>

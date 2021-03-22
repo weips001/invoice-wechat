@@ -1,0 +1,31 @@
+/* pages/choiceTeam/choiceTeam.wxss */
+page {
+  height: 100%;
+}
+.wrap {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.common {
+  width: 400rpx;
+  height: 400rpx;
+  border-radius: 50%;
+  line-height: 400rpx;
+  text-align: center;
+}
+
+.create {
+  background-color: #67c23a;
+}
+
+.join {
+  margin-top: 40rpx;
+  background-color: #909399;
+}
+
+.test {
+  width: 120px;
+  color: #000!important;
+}

@@ -1,0 +1,27 @@
+<view>
+  <mp-cells ext-class="my-cells" title="发票信息：">
+    <mp-cell value="发票代码：" footer="{{billInfo.billCode}}"></mp-cell>
+    <mp-cell value="发票号码：" footer="{{billInfo.billNumber}}"></mp-cell>
+    <mp-cell>
+      <view>发票金额：</view>
+      <view slot="footer">
+        {{billInfo.money}}
+        <text class="text" wx:if="billInfo.money > 0">（不含税）</text>
+      </view>
+    </mp-cell>
+    <mp-cell value="开票日期：" footer="{{billInfo.billDate}}"></mp-cell>
+    <mp-cell value="校验码：" footer="{{billInfo.checkCode}}"></mp-cell>
+    <mp-cell value="价税合计：" footer="{{billInfo.money}}"></mp-cell>
+  </mp-cells>
+  <mp-form id="form" models="{{formData}}">
+    <mp-cells title="其它信息：">
+      <mp-cell prop="applyUser" title="报销人：" ext-class="">
+        <input bindinput="formInputChange" data-field="applyUser" class="weui-input" placeholder="请输入报销人"/>
+      </mp-cell>
+      <mp-cell prop="voucherNumber" title="凭证号：" ext-class="">
+        <input bindinput="formInputChange" data-field="voucherNumber" class="weui-input" placeholder="请输入凭证号"/>
+      </mp-cell>
+    </mp-cells>
+  </mp-form>
+  <button type="primary" class="btn" bindtap="saveAndtakeScan">保存并继续扫描</button>
+</view>

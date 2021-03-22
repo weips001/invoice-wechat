@@ -1,0 +1,15 @@
+/* pages/home/home.wxss */
+page {
+  height: 100%;
+}
+.scan {
+  height: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  width: 320rpx;
+  height: 320rpx;
+}

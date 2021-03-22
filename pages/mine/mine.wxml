@@ -1,0 +1,19 @@
+<view>
+  <view class="user">
+    <view class="avatar">
+      <open-data wx:if="{{isCheckWe}}" type="userAvatarUrl" class="login-icon"></open-data>
+      <text wx:else class='iconfont icon-nav_icon_avatar_nor no-login-icon'></text>
+    </view>
+    <view class="login">
+      <button wx:if="{{!isCheckWe}}" plain class="loginBtn" bindgetuserinfo="bindgetuserinfo" open-type="getUserInfo">微信授权登录</button>
+      <button wx:elif="{{isCheckWe && !isCheckPhone}}" plain class="loginBtn" bindtap="inputPhoneNumber">获取手机号</button>
+      <!-- <text wx:else class="name">韦鹏帅</text> -->
+      <open-data wx:else type="userNickName" class="name"></open-data>
+      <!-- 韦鹏帅 -->
+    </view>
+  </view>
+  <mp-cells ext-class="my-cells" title="">
+    <mp-cell link url="../choiceTeam/choiceTeam" hover value="团队管理" />
+    <mp-cell link url="../billList/billList" hover value="查看录入发票" />
+  </mp-cells>
+</view>
