@@ -1,5 +1,6 @@
 // pages/home/home.js
 const takePhoto = require('../../utils/takescan')
+const {checkLoginFromLocal} = require('../../utils/common')
 Page({
   /**
    * 页面的初始数据
@@ -11,7 +12,10 @@ Page({
     console.log('e', e)
   },
   takePhoto() {
-    takePhoto()
+    const islogin = checkLoginFromLocal()
+    if(islogin) {
+      takePhoto()
+    }
   },
   takeShort() {
     wx.vibrateLong()
@@ -23,7 +27,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // this.login()
+
   },
 
   /**

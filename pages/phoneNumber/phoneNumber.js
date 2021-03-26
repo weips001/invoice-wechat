@@ -39,12 +39,18 @@ Page({
         title: '保存成功',
         icon: "success"
       })
+      this.setData({
+        loading: false
+      })
       setTimeout(() => {
         wx.switchTab({
           url: '/pages/mine/mine',
           success: function(res) {
-            // 通过eventChannel向被打开页面传送数据
-            // res.eventChannel.emit('acceptData', { data: 'test' })
+            let page=getCurrentPages().pop();
+            if(page==undefined || page==null){
+              return;
+            }
+            page.onLoad();
           }
         })
       }, 300)
@@ -53,7 +59,6 @@ Page({
       this.setData({
         error: e.msg || '保存失败'
       })
-    }).finally(() => {
       this.setData({
         loading: false
       })

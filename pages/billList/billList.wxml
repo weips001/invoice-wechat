@@ -1,4 +1,4 @@
-<view class="wrap">
+<view class="wrap" wx:if="{{list.length}}">
   <view wx:for="{{list}}" wx:key="id" class="item">
       <view class="time">
         <text>{{item.createTime}}</text>
@@ -24,3 +24,5 @@
   </view>
   <!-- <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">查看更多</button> -->
 </view>
+<view wx:else>暂无发票记录</view>
+

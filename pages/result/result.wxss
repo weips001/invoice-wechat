@@ -5,5 +5,20 @@
 
 .btn {
   margin: 30rpx 0 0;
+  display: flex;
+}
+
+.save {
+  width: 30%!important;
+}
+
+.error {
+  padding: 16px;
+  color: #f56c6c;
+  font-size: 16px;
+}
+
+.err-btn {
+  margin: 30rpx 0 0;
   width: 80%!important;
 }

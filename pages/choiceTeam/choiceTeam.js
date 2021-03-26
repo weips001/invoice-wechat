@@ -1,6 +1,6 @@
 // pages/choiceTeam/choiceTeam.js
 const {get} = require('../../utils/request')
-const {getPhoneFromServe} = require('../../utils/common')
+const {getUserFromOpenid} = require('../../utils/common')
 Page({
 
   /**
@@ -8,6 +8,7 @@ Page({
    */
   data: {
     userList: [],
+    isShow: false,
     slideButtons: [
       {
         type: 'warn',
@@ -30,29 +31,56 @@ Page({
   slideButtonTap(e) {
     console.log('e', e)
   },
-  getUserList(compid) {
-    get('/api/user',null, {compid}).then(res => {
-      this.setData({
-        userList: res.data
+  getUserList() {
+    get('/api/user').then(res => {
+      const userList = res.data
+      // userList.filter(user => user.)
+      wx.hideLoading({
+        success: () => {
+          this.setData({
+            userList,
+            isShow: true
+          })
+        },
       })
+    }).catch(() => {
+      wx.hideLoading()
+      this.setData({
+        isShow: true
+      })
+      return false
     })
   },
   init() {
-    console.log('in')
     const compId = wx.getStorageSync('compId')
+    wx.showLoading({
+      title: '数据加载中...',
+    })
     if(compId) {
-      this.getUserList(compId)
+      this.getUserList()
     } else {
-      const user = getPhoneFromServe()
-      if(user) {
-        this.getUserList(user.compId)
-      }
+      getUserFromOpenid().then(user => {
+        console.log('user', user)
+        if(user) {
+          if(user.compId) {
+            this.getUserList()
+          } else {
+            this.setData({
+              isShow: true
+            })
+            wx.hideLoading()
+          }
+        } else {
+          wx.hideLoading()
+        }
+      })
     }
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log('iniy')
     this.init()
   },
 

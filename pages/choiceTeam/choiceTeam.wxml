@@ -1,18 +1,18 @@
-<view wx:if="{{!userList.length}}" class="wrap">
-  <view class="common create" bindtap="createTeam">
-    <text>创建新的团队</text>
+<block wx:if="{{isShow}}">
+  <view wx:if="{{!userList.length}}" class="wrap">
+    <mp-cells>
+      <mp-cell link bindtap="createTeam" hover value="创建新的团队"></mp-cell>
+      <mp-cell link bindtap="joinTeam" hover value="加入已有团队"></mp-cell>
+    </mp-cells>
   </view>
-  <view class="common join" bindtap="joinTeam">
-    <text>加入已有团队</text>
-  </view>
-</view>
 
-<view class="aaa" wx:else>
-  <mp-cells title="目前团队成员：">
-    <mp-slideview buttons="{{slideButtons}}" data-id="{{item.id}}" bindbuttontap="slideButtonTap" wx:for="{{userList}}" wx:key="id">
-      <mp-cell value="{{item.userName}}" footer="{{item.userPhone}}">
-        <image slot="icon" src="{{icon}}" style="margin-right: 16px;vertical-align: middle;width:20px; height: 20px;"></image>
-      </mp-cell>
-    </mp-slideview>
-  </mp-cells>
-</view>
+  <view class="aaa" wx:else>
+    <mp-cells title="目前团队成员：">
+      <mp-slideview buttons="{{slideButtons}}" data-id="{{item.id}}" bindbuttontap="slideButtonTap" wx:for="{{userList}}" wx:key="id">
+        <mp-cell value="{{item.userName}}" footer="{{item.userPhone}}">
+          <image slot="icon" src="{{icon}}" style="margin-right: 16px;vertical-align: middle;width:20px; height: 20px;"></image>
+        </mp-cell>
+      </mp-slideview>
+    </mp-cells>
+  </view>
+</block>

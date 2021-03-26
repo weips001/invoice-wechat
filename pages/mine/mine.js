@@ -1,5 +1,6 @@
 // pages/mine/mine.js
 const {post} = require('../../utils/request')
+const {checkLoginFromLocal, wechatLogin} = require('../../utils/common')
 Page({
 
   /**
@@ -9,43 +10,17 @@ Page({
     isCheckWe: false,
     isCheckPhone: false
   },
-  checkLogin() {
-    return new Promise((resolve, reject) => {
-      wx.checkSession({
-        success () {
-          const openid = wx.getStorageSync('openid')
-          if(openid) {
-            resolve(openid)
-          } else {
-            reject()
-          }
-        },
-        fail (err) {
-          reject()
-        }
+  gotoItem(e) {
+    const url = e.target.dataset.url
+    const islogin = checkLoginFromLocal()
+    if(islogin) {
+      wx.navigateTo({
+        url
       })
-    })
+    }
+    console.log(e)
   },
-  login() {
-    return new Promise((resolve, reject) => {
-      this.checkLogin().then((openid) => {
-        resolve(openid)
-      }).catch(() => {
-        wx.login({
-          success({code}) {
-            post('/api/wxLogin', {js_code: code}).then(res => {
-              const openid = res.openid
-              console.log('2', openid)
-              wx.setStorageSync('openid', openid)
-              resolve(openid)
-            }).catch(() => {
-              reject()
-            })
-          }
-        })
-      })
-    })
-  },
+  
   bindgetuserinfo(e) {
     const {userInfo} = e.detail
     if(userInfo) {
@@ -69,7 +44,7 @@ Page({
         isCheckWe: true,
         isCheckPhone: !!phone
       })
-      this.login()
+      wechatLogin()
     } else {
       wx.showToast({
         title: "请允许获取用户信息！",
@@ -166,7 +141,7 @@ Page({
    */
   onLoad: function (options) {
     this.userInit()
-    this.login()
+    wechatLogin()
     const eventChannel = this.getOpenerEventChannel()
     console.log(eventChannel)
     eventChannel.on && eventChannel.on('acceptData', function(data) {

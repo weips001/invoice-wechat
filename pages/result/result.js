@@ -1,6 +1,7 @@
 // pages/result/result.js
 const takePhoto = require('../../utils/takescan')
-const {post} = require('../../utils/request')
+const {post, get} = require('../../utils/request')
+const {formatTime} = require('../../utils/util')
 Page({
 
   /**
@@ -20,21 +21,31 @@ Page({
       // 校验码
       checkCode: ""
     },
-    formData: {
-
-    },
+    formData: {},
+    // 默认不显示
+    showExtra: false
   },
-  saveAndtakeScan() {
+  contiuneScan() {
+    this.resetBill()
+    takePhoto('redirect')
+  },
+  resetBill() {
+    this.setData({
+      billInfo: {}
+    })
+  },
+  save() {
     const billInfo = wx.getStorageSync('bill')
     const openid = wx.getStorageSync('openid')
     const params = {
       ...this.formData,
       ...billInfo,
-      openid
+      openid,
+      inputMethod: 'phone'
     }
     post('/api/bill', params).then(() => {
       wx.showToast({title: '保存成功'})
-      takePhoto()
+      return true
     }).catch(e => {
       const title = e.msg || '保存失败'
       wx.showToast({
@@ -42,6 +53,15 @@ Page({
         icon: 'error',
         duration: 2000
       })
+      return false
+    })
+  },
+  saveAndtakeScan() {
+    this.save().then(flag => {
+      if(flag) {
+        this.resetBill()
+        takePhoto('redirect')
+      }
     })
     // console.log(this.data.formData)
   },
@@ -51,9 +71,9 @@ Page({
       [`formData.${field}`]: e.detail.value
     })
   },
-  getInfo() {
+  getInfo(info) {
     try {
-      const billInfo = wx.getStorageSync('bill')
+      const billInfo = info || wx.getStorageSync('bill') 
       if (billInfo) {
         this.setData({billInfo})
       }
@@ -61,12 +81,44 @@ Page({
       return null
     }
   },
-  
+  checkBill() {
+    const billInfo =  wx.getStorageSync('bill')
+    const params = {
+      billNumber: billInfo.billNumber
+    }
+    wx.showLoading({
+      title: '数据获取中',
+    })
+    get('/api/billIsExit', params).then(() => {
+      wx.hideLoading({
+        success: () => {
+          this.setData({
+            showExtra: true
+          })
+          this.getInfo()
+        }
+      })
+      
+    }).catch(e => {
+      wx.hideLoading({
+        success: () => {
+          this.setData({
+            showExtra: true
+          })
+          const data = e.data
+          data.createTime = formatTime(new Date(data.createTime))
+          this.getInfo(data)
+        }
+      })
+      
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getInfo()
+    // wx.setStorageSync('bill', {billNumber: '08778438'})
+    this.checkBill()
   },
 
   /**

@@ -18,33 +18,22 @@ function transformBillInfo(billString) {
   }
   return null
 }
-function takePhoto() {
+function takePhoto(naviMethod) {
+  wx.removeStorageSync('bill')
   wx.scanCode({
     success: (res) => {
       if(res) {
-        console.log('res', res)
-        console.log('openid', openid)
         const billInfo = transformBillInfo(res.result)
-        const openid = wx.getStorageSync('openid')
         if(billInfo && billInfo.billNumber) {
-          const params = {
-            // ...billInfo,
-            // openid
-            billNumber: billInfo.billNumber
-          }
-          get('/api/billIsExit', params).then(() => {
-            wx.showToast({title: '录入成功'})
+          if(naviMethod === 'redirect') {
+            wx.redirectTo({
+              url: '/pages/result/result',
+            })
+          } else {
             wx.navigateTo({
               url: '/pages/result/result'
             })
-          }).catch(e => {
-            const title = e.msg || '录入失败'
-            wx.showToast({
-              title,
-              icon: 'error',
-              duration: 2000
-            })
-          })
+          }
         } else {
           wx.showToast({
             title: '不支持的发票格式',
@@ -52,6 +41,15 @@ function takePhoto() {
             duration: 2000
           })
         }
+      }
+    },
+    fail: (e) => {
+      console.log(e)
+      if(e.errMsg !== 'scanCode:fail cancel') {
+        wx.showToast({
+          title: '扫描失败',
+          icon: 'error'
+        })
       }
     }
   })

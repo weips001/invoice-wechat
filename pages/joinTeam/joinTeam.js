@@ -48,9 +48,18 @@ Page({
         title: '团队加入成功',
         icon: "success"
       })
+      this.setData({
+        loading: false
+      })
       setTimeout(() => {
-        wx.switchTab({
-          url: '/pages/mine/mine',
+        wx.navigateBack({
+          success() {
+            let page=getCurrentPages().pop();
+            if(page==undefined || page==null){
+              return;
+            }
+            page.onLoad();
+          }
         })
       }, 300)  
     })
@@ -59,8 +68,6 @@ Page({
         title: e.msg || '团队加入失败',
         icon: "error"
       })
-    })
-    .finally(() => {
       this.setData({
         loading: false
       })

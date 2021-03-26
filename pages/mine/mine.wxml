@@ -13,7 +13,7 @@
     </view>
   </view>
   <mp-cells ext-class="my-cells" title="">
-    <mp-cell link url="../choiceTeam/choiceTeam" hover value="团队管理" />
-    <mp-cell link url="../billList/billList" hover value="查看录入发票" />
+    <mp-cell link data-url="/pages/choiceTeam/choiceTeam" bindtap="gotoItem" hover value="团队管理" />
+    <mp-cell link data-url="/pages/billList/billList" bindtap="gotoItem" hover value="查看录入发票" />
   </mp-cells>
 </view>

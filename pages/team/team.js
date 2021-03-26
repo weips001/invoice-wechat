@@ -40,22 +40,32 @@ Page({
       bossPhone
     }
     post('/api/company', params)
-    .then(() => {
+    .then((res) => {
+      wx.setStorageSync('compId', res.compId)
       wx.showToast({
         title: '团队创建成功',
         icon: "success"
       })
-      wx.switchTab({
-        url: '/pages/mine/mine',
+      this.setData({
+        loading: false
       })
+      setTimeout(() => {
+        wx.navigateBack({
+          success() {
+            let page=getCurrentPages().pop();
+            if(page==undefined || page==null){
+              return;
+            }
+            page.onLoad();
+          }
+        })
+      }, 300)
     })
     .catch(e => {
       wx.showToast({
         title: e.msg || '团队创建失败',
         icon: "error"
       })
-    })
-    .finally(() => {
       this.setData({
         loading: false
       })

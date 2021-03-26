@@ -13,15 +13,27 @@
     <mp-cell value="校验码：" footer="{{billInfo.checkCode}}"></mp-cell>
     <mp-cell value="价税合计：" footer="{{billInfo.money}}"></mp-cell>
   </mp-cells>
-  <mp-form id="form" models="{{formData}}">
-    <mp-cells title="其它信息：">
-      <mp-cell prop="applyUser" title="报销人：" ext-class="">
-        <input bindinput="formInputChange" data-field="applyUser" class="weui-input" placeholder="请输入报销人"/>
-      </mp-cell>
-      <mp-cell prop="voucherNumber" title="凭证号：" ext-class="">
-        <input bindinput="formInputChange" data-field="voucherNumber" class="weui-input" placeholder="请输入凭证号"/>
-      </mp-cell>
-    </mp-cells>
-  </mp-form>
-  <button type="primary" class="btn" bindtap="saveAndtakeScan">保存并继续扫描</button>
+  <block wx:if="{{showExtra}}">
+    <block wx:if="{{!billInfo.createTime}}">
+      <mp-form id="form" models="{{formData}}">
+        <mp-cells title="其它信息：">
+          <mp-cell prop="applyUser" title="报销人：" ext-class="">
+            <input bindinput="formInputChange" data-field="applyUser" class="weui-input" placeholder="请输入报销人"/>
+          </mp-cell>
+          <mp-cell prop="voucherNumber" title="凭证号：" ext-class="">
+            <input bindinput="formInputChange" data-field="voucherNumber" class="weui-input" placeholder="请输入凭证号"/>
+          </mp-cell>
+        </mp-cells>
+      </mp-form>
+      <view class="btn" wx:if="{{!billInfo.createTime}}">
+        <button bindtap="saveAndtakeScan" class="save" bindtap="save">保存</button>
+        <button type="primary" class="continue" bindtap="saveAndtakeScan">保存并继续扫描</button>
+      </view>
+    </block>
+    <view wx:else class="error">
+      <text>注意：</text>
+      <text>这张发票已于{{billInfo.createTime}}录入系统</text>
+      <button type="primary" class="err-btn" bindtap="contiuneScan">继续扫描</button>
+    </view>
+  </block>
 </view>

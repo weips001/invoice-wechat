@@ -1,13 +1,13 @@
 {
   "pages":[
     "pages/home/home",
-    "pages/mine/mine",
     "pages/choiceTeam/choiceTeam",
+    "pages/result/result",
+    "pages/mine/mine",
     "pages/joinTeam/joinTeam",
     "pages/phoneNumber/phoneNumber",
     "pages/team/team",
     "pages/billList/billList",
-    "pages/result/result",
     "pages/index/index",
     "pages/logs/logs"
   ],
