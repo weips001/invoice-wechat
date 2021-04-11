@@ -1,6 +1,6 @@
 // pages/team/team.js
 const {createCompany} = require('../../service/index')
-const {getPhoneNumber} = require('../../utils/common')
+const {getPhoneNumber,getCurrentUser} = require('../../utils/common')
 Page({
 
   /**
@@ -67,6 +67,7 @@ Page({
         })
       }, 300)
     } catch(e) {
+      console.log('saveCompany fail', e)
       wx.showToast({
         title: e.msg || '团队创建失败',
         icon: "error"

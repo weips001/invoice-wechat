@@ -6,10 +6,9 @@ const baseUrl = 'http://192.168.3.7:7001'
 function request (method) {
   return function (url, data = {}) {
     return new Promise((resolve, reject) => {
-      const header = {
-        compid: ''
-      }
-      const compid = wx.getStorageSync('compId')
+      const header = {}
+      const currentUser = wx.getStorageSync('currentUser')
+      const compid = currentUser && currentUser.compId
       const token = wx.getStorageSync('token')
       if(compid) {
         header.compid = compid

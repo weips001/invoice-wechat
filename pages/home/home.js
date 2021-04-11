@@ -11,10 +11,14 @@ Page({
   bindgetuserinfo(e){
     console.log('e', e)
   },
-  takePhoto() {
-    const islogin = checkLoginFromLocal()
-    if(islogin) {
-      takePhoto()
+  async takePhoto() {
+    try {
+      const islogin = await checkLoginFromLocal()
+      if(islogin) {
+        takePhoto()
+      }
+    } catch(e) {
+      console.log('takePhoto fail', e)
     }
   },
   takeShort() {
