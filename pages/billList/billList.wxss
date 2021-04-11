@@ -21,3 +21,13 @@ page {
 .info {
   font-size: 12px;
 }
+.empty {
+  height: 240rpx;
+  margin: 24rpx;
+  border-radius: 8rpx;
+  background-color: #fff;
+  text-align: center;
+  line-height: 240rpx;
+  font-size: 24px;
+  color: #999
+}

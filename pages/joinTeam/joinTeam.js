@@ -1,5 +1,6 @@
 // pages/team/team.js
-const {post} = require('../../utils/request')
+const {addUserByCode} = require('../../service/index')
+const {getPhoneNumber} = require('../../utils/common')
 Page({
 
   /**
@@ -34,15 +35,14 @@ Page({
     this.setData({
       loading: true
     })
-    const userPhone = wx.getStorageSync('phoneNumber')
+    const userPhone = getPhoneNumber()
     const openid = wx.getStorageSync('openid')
     const params = {
       ...this.data.formData,
       userPhone,
       openid
     }
-    console.log(params)
-    post('/api/addUserByCode', params)
+    addUserByCode(params)
     .then(() => {
       wx.showToast({
         title: '团队加入成功',

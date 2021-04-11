@@ -1,6 +1,6 @@
 // pages/mine/mine.js
-const {post} = require('../../utils/request')
-const {checkLoginFromLocal, wechatLogin} = require('../../utils/common')
+const { getUserFromOpenid, getWeInfo, saveUser } = require('../../service/index')
+const { checkLoginFromLocal, wechatLogin, getOpenidAndPhoneNumber, getCurrentUser,getPhoneNumber } = require('../../utils/common')
 Page({
 
   /**
@@ -10,126 +10,58 @@ Page({
     isCheckWe: false,
     isCheckPhone: false
   },
-  gotoItem(e) {
-    const url = e.target.dataset.url
-    const islogin = checkLoginFromLocal()
-    if(islogin) {
-      wx.navigateTo({
-        url
-      })
-    }
-    console.log(e)
-  },
-  
-  bindgetuserinfo(e) {
-    const {userInfo} = e.detail
-    if(userInfo) {
-      console.log(userInfo)
-      wx.setStorageSync('user', userInfo)
-      const phone = this.getPhoneNumber()
-      if(phone) {
-        this.setData({
-          isCheckWe: true,
-          isCheckPhone: true
+  async gotoItem(e) {
+    try {
+      const url = e.target.dataset.url
+      const islogin = await checkLoginFromLocal()
+      if (islogin) {
+        wx.navigateTo({
+          url
         })
-      } else {
-        this.getPhoneFromServe(res => {
+      }
+    } catch (e) {
+      console.log('gotoItem fail', e)
+    }
+  },
+  getUserProfile() {
+    wx.getUserProfile({
+      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      success: async (res) => {
+        console.log('res', res)
+        // TODO: 这里新增一个用户，只有openid
+        // saveUser
+        try {
+          const phoneNumber = await getPhoneNumber()
           this.setData({
             isCheckWe: true,
-            isCheckPhone: res
+            isCheckPhone: !!phoneNumber
           })
+        } catch (e) {
+          console.log('getUserProfile fail', e)
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: "请允许微信授权！",
+          icon: "none",
+          duration: 2000
         })
       }
-      this.setData({
-        isCheckWe: true,
-        isCheckPhone: !!phone
-      })
-      wechatLogin()
-    } else {
-      wx.showToast({
-        title: "请允许获取用户信息！",
-        icon: "none",
-        duration: 2000
-      })
-      
-    }
-    console.log(e)
-  },
-  // 获取微信授权
-  hasUserAuth() {
-    return new Promise(resolve => {
-      wx.getSetting({
-        success(res) {
-          const flag = res.authSetting['scope.userInfo']
-          resolve(flag)
-        },
-        fail() {
-          resolve(false)
-        }
-      })
-    })  
-  },
-  // 从storage中获取用户信息
-  getUserFromStorage() {
-    return wx.getStorageSync('user')
+    })
   },
   // 通过openid查看手机号是否存在
-  userInit() {
-    this.hasUserAuth()
-    .then(status => {
-      if(status) {
-        // 如果有用户权限 判断本地是否有数据
-        const user = this.getUserFromStorage()
-        if(user) {
-          // 如果有用户信息，则不显示获取微信按钮
-          this.setData({
-            isCheckWe: true
-          })
-          return true
-        }
-        return false
-      } else {
-        if(this.data.isCheckWe) {
-          this.setData({
-            isCheckWe: false
-          })
-        }
-        return false
-      }
-    })
-    .then(hasUser => {
-      if(hasUser) {
-        const phone = this.getPhoneNumber()
-        if(phone) {
-          this.setData({
-            isCheckPhone: true
-          })
-        } else {
-          this.getPhoneFromServe()
-        }
-      }
-    })
-  },
-  getPhoneFromServe() {
-    const openid = wx.getStorageSync('openid')
-    return post('/api/getUserFromOpenid', {openid}).then(res=> {
-      if(res.data) {
-        wx.setStorageSync('phoneNumber', res.data.userPhone)
-        wx.setStorageSync('compId', res.data.compId)
-        this.setData({
-          isCheckPhone: true
-        })
-        return true
-      }
+  async userInit() {
+    const user = await getCurrentUser()
+    if(user) {
       this.setData({
-        isCheckPhone: false
+        isCheckWe: true,
+        isCheckPhone: !!user.userPhone
       })
       return false
+    }
+    this.setData({
+      isCheckWe: false,
     })
-    .catch(() => false)
-  },
-  getPhoneNumber() {
-    return wx.getStorageSync('phoneNumber')
   },
   inputPhoneNumber() {
     wx.navigateTo({
@@ -140,14 +72,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log('options', options)
     this.userInit()
-    wechatLogin()
-    const eventChannel = this.getOpenerEventChannel()
-    console.log(eventChannel)
-    eventChannel.on && eventChannel.on('acceptData', function(data) {
-      console.log(data)
-    })
-    // console.log(options)
   },
 
   /**

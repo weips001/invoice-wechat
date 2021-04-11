@@ -5,5 +5,5 @@
       <input bindinput="formInputChange" type="number" data-field="userPhone" class="weui-input" placeholder="请输入手机号码"/>
     </mp-cell>
   </mp-cells>
-  <button class="createBtn" loading="{{loading}}" type="primary" bindtap="submitForm">确定</button>
+  <button class="createBtn" loading="{{loading}}" type="primary" bindtap="submitForm">确定绑定</button>
 </mp-form>

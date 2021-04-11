@@ -18,7 +18,7 @@
       <mp-form id="form" models="{{formData}}">
         <mp-cells title="其它信息：">
           <mp-cell prop="applyUser" title="报销人：" ext-class="">
-            <input bindinput="formInputChange" data-field="applyUser" class="weui-input" placeholder="请输入报销人"/>
+            <input bindinput="formInputChange" data-field="applyUser" class="weui-input" placeholder="请输入报销人（报销人是自己可不填）"/>
           </mp-cell>
           <mp-cell prop="voucherNumber" title="凭证号：" ext-class="">
             <input bindinput="formInputChange" data-field="voucherNumber" class="weui-input" placeholder="请输入凭证号"/>

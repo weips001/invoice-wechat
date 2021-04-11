@@ -1,6 +1,6 @@
 // pages/choiceTeam/choiceTeam.js
-const {get} = require('../../utils/request')
-const {getUserFromOpenid} = require('../../utils/common')
+const {getUserList} = require('../../service/index')
+const {getUserFromOpenid, getCompid} = require('../../utils/common')
 Page({
 
   /**
@@ -32,7 +32,7 @@ Page({
     console.log('e', e)
   },
   getUserList() {
-    get('/api/user').then(res => {
+    getUserList().then(res => {
       const userList = res.data
       // userList.filter(user => user.)
       wx.hideLoading({
@@ -51,29 +51,24 @@ Page({
       return false
     })
   },
-  init() {
-    const compId = wx.getStorageSync('compId')
-    wx.showLoading({
-      title: '数据加载中...',
-    })
-    if(compId) {
-      this.getUserList()
-    } else {
-      getUserFromOpenid().then(user => {
-        console.log('user', user)
-        if(user) {
-          if(user.compId) {
-            this.getUserList()
-          } else {
-            this.setData({
-              isShow: true
-            })
-            wx.hideLoading()
-          }
-        } else {
-          wx.hideLoading()
-        }
+  async init() {
+    try {
+      wx.showLoading({
+        title: '数据加载中...',
       })
+      const compId = await getCompid()
+      if(compId) {
+        this.getUserList()
+        wx.hideLoading()
+        return false
+      }
+      this.setData({
+        isShow: true
+      })
+      wx.hideLoading()
+    } catch(e) {
+      wx.hideLoading()
+      console.log('choiceTeam init fail', e)
     }
   },
   /**

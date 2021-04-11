@@ -1,13 +1,14 @@
 {
   "pages":[
     "pages/home/home",
-    "pages/choiceTeam/choiceTeam",
-    "pages/result/result",
+    "pages/billList/billList",
     "pages/mine/mine",
+    "pages/test/test",
+    "pages/result/result",
+    "pages/choiceTeam/choiceTeam",
     "pages/joinTeam/joinTeam",
     "pages/phoneNumber/phoneNumber",
     "pages/team/team",
-    "pages/billList/billList",
     "pages/index/index",
     "pages/logs/logs"
   ],

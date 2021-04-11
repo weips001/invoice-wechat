@@ -24,5 +24,5 @@
   </view>
   <!-- <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">查看更多</button> -->
 </view>
-<view wx:else>暂无发票记录</view>
+<view wx:else class="empty">暂无发票记录</view>
 

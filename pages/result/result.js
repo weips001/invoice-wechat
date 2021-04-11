@@ -1,7 +1,7 @@
 // pages/result/result.js
 const takePhoto = require('../../utils/takescan')
-const {post, get} = require('../../utils/request')
-const {formatTime} = require('../../utils/util')
+const { billIsExit, saveBill } = require('../../service/index')
+const { formatTime } = require('../../utils/util')
 Page({
 
   /**
@@ -34,62 +34,54 @@ Page({
       billInfo: {}
     })
   },
-  save() {
-    const billInfo = wx.getStorageSync('bill')
-    const openid = wx.getStorageSync('openid')
-    const params = {
-      ...this.formData,
-      ...billInfo,
-      openid,
-      inputMethod: 'phone'
-    }
-    post('/api/bill', params).then(() => {
-      wx.showToast({title: '保存成功'})
-      return true
-    }).catch(e => {
+  async save() {
+    try {
+      const billInfo = wx.getStorageSync('bill')
+      const openid = wx.getStorageSync('openid')
+      const params = {
+        ...this.formData,
+        ...billInfo,
+        openid,
+        inputMethod: 'phone'
+      }
+      await saveBill(params)
+      wx.showToast({ title: '保存成功' })
+    } catch (e) {
       const title = e.msg || '保存失败'
       wx.showToast({
         title,
         icon: 'error',
         duration: 2000
       })
-      return false
-    })
+    }
   },
-  saveAndtakeScan() {
-    this.save().then(flag => {
-      if(flag) {
-        this.resetBill()
-        takePhoto('redirect')
-      }
-    })
-    // console.log(this.data.formData)
+  async saveAndtakeScan() {
+    await this.save()
+    this.resetBill()
+    takePhoto('redirect')
   },
   formInputChange(e) {
-    const {field} = e.currentTarget.dataset
+    const { field } = e.currentTarget.dataset
     this.setData({
       [`formData.${field}`]: e.detail.value
     })
   },
   getInfo(info) {
     try {
-      const billInfo = info || wx.getStorageSync('bill') 
+      const billInfo = info || wx.getStorageSync('bill')
       if (billInfo) {
-        this.setData({billInfo})
+        this.setData({ billInfo })
       }
     } catch (e) {
       return null
     }
   },
   checkBill() {
-    const billInfo =  wx.getStorageSync('bill')
-    const params = {
-      billNumber: billInfo.billNumber
-    }
+    const billInfo = wx.getStorageSync('bill')
     wx.showLoading({
       title: '数据获取中',
     })
-    get('/api/billIsExit', params).then(() => {
+    billIsExit(billInfo.billNumber).then(() => {
       wx.hideLoading({
         success: () => {
           this.setData({
@@ -98,7 +90,7 @@ Page({
           this.getInfo()
         }
       })
-      
+
     }).catch(e => {
       wx.hideLoading({
         success: () => {
@@ -110,7 +102,7 @@ Page({
           this.getInfo(data)
         }
       })
-      
+
     })
   },
   /**

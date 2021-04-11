@@ -1,5 +1,6 @@
 // pages/team/team.js
-const {post} = require('../../utils/request')
+const {createCompany} = require('../../service/index')
+const {getPhoneNumber} = require('../../utils/common')
 Page({
 
   /**
@@ -30,18 +31,23 @@ Page({
         [`formData.${field}`]: e.detail.value
     })
   },
-  saveCompany() {
-    this.setData({
-      loading: true
-    })
-    const bossPhone = wx.getStorageSync('phoneNumber')
-    const params = {
-      ...this.data.formData,
-      bossPhone
-    }
-    post('/api/company', params)
-    .then((res) => {
-      wx.setStorageSync('compId', res.compId)
+  async saveCompany() {
+    try {
+      this.setData({
+        loading: true
+      })
+      const bossPhone = await getPhoneNumber()
+      const params = {
+        ...this.data.formData,
+        bossPhone
+      }
+      const res = await createCompany(params)
+      const user = await getCurrentUser()
+      const userInfo = {
+        ...user,
+        compId: res.compId
+      }
+      wx.setStorageSync('currentUser', userInfo)
       wx.showToast({
         title: '团队创建成功',
         icon: "success"
@@ -60,8 +66,7 @@ Page({
           }
         })
       }, 300)
-    })
-    .catch(e => {
+    } catch(e) {
       wx.showToast({
         title: e.msg || '团队创建失败',
         icon: "error"
@@ -69,7 +74,7 @@ Page({
       this.setData({
         loading: false
       })
-    })
+    }
   },
   createCompany() {
     this.selectComponent('#form').validate((valid, errors) => {

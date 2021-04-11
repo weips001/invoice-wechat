@@ -1,5 +1,5 @@
 // pages/billList/billList.js
-const {get} = require('../../utils/request')
+const {getBillList} = require('../../service/index')
 const {formatTime} = require('../../utils/util')
 Page({
 
@@ -16,7 +16,7 @@ Page({
     console.log(e.detail.encryptedData)
   },
   getList() {
-    get('/api/bill').then(res => {
+    getBillList().then(res => {
       console.log(res)
       const list = res.data.map(item=> {
         return {

@@ -1,5 +1,5 @@
 // pages/phoneNumber/phoneNumber.js
-const {post} = require('../../utils/request')
+const { saveUser } = require('../../service/index')
 Page({
 
   /**
@@ -13,30 +13,31 @@ Page({
       {
         name: 'userPhone',
         rules: [
-          {required: true, message: '手机号必填'},
-          {mobile: true, message: '手机号格式不对'}
+          { required: true, message: '手机号必填' },
+          { mobile: true, message: '手机号格式不对' }
         ],
       }
     ]
   },
   formInputChange(e) {
-    const {field} = e.currentTarget.dataset
+    const { field } = e.currentTarget.dataset
     this.setData({
-        [`formData.${field}`]: e.detail.value
+      [`formData.${field}`]: e.detail.value
     })
   },
-  savePhone() {
-    this.setData({
-      loading: false
-    })
-    const params = {
-      ...this.data.formData,
-      openid: wx.getStorageSync('openid')
-    }
-    post('/api/user', params).then(() => {
-      wx.setStorageSync('phoneNumber', this.data.formData.userPhone)
+  async savePhone() {
+    try {
+      this.setData({
+        loading: false
+      })
+      const params = {
+        ...this.data.formData,
+        openid: wx.getStorageSync('openid')
+      }
+      await saveUser(params)
+      // TODO:需要重新存入用户人员信息
       wx.showToast({
-        title: '保存成功',
+        title: '手机号绑定成功',
         icon: "success"
       })
       this.setData({
@@ -45,50 +46,38 @@ Page({
       setTimeout(() => {
         wx.switchTab({
           url: '/pages/mine/mine',
-          success: function(res) {
-            let page=getCurrentPages().pop();
-            if(page==undefined || page==null){
+          success: function (res) {
+            let page = getCurrentPages().pop();
+            if (page == undefined || page == null) {
               return;
             }
             page.onLoad();
           }
         })
       }, 300)
-    }).catch(e => {
-      console.log(e)
+    } catch (e) {
       this.setData({
-        error: e.msg || '保存失败'
+        error: e.msg || '手机号绑定失败'
       })
       this.setData({
         loading: false
       })
-    })
+      console.log('savePhone fail', e)
+    }
   },
   submitForm() {
-    // wx.switchTab({
-    //   url: '/pages/mine/mine',
-    //   success: function(res) {
-    //     console.log(res)
-    //     // 通过eventChannel向被打开页面传送数据
-    //     // res.eventChannel.emit('acceptData', { data: 'test' })
-    //   }
-    // })
-    // return
     this.selectComponent('#form').validate((valid, errors) => {
-        console.log('valid', valid, errors)
-        if (!valid) {
-          const firstError = Object.keys(errors)
-          if (firstError.length) {
-            this.setData({
-              error: errors[firstError[0]].message
-            })
-          }
-        } else {
-          this.savePhone()
-          // this.setData({
-          //   loading: true
-          // })
+      console.log('valid', valid, errors)
+      if (!valid) {
+        const firstError = Object.keys(errors)
+        if (firstError.length) {
+          this.setData({
+            error: errors[firstError[0]].message
+          })
         }
+      } else {
+        this.savePhone()
+      }
     })
   },
   /**
