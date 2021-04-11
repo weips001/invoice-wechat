@@ -1,6 +1,6 @@
 // pages/mine/mine.js
-const { getUserFromOpenid, getWeInfo, saveUser } = require('../../service/index')
-const { checkLoginFromLocal, wechatLogin, getOpenidAndPhoneNumber, getCurrentUser,getPhoneNumber } = require('../../utils/common')
+const { getUserFromopenid, getWeInfo, saveUser } = require('../../service/index')
+const { checkLoginFromLocal, wechatLogin, getopenidAndPhoneNumber, getCurrentUser,getPhoneNumber } = require('../../utils/common')
 Page({
 
   /**

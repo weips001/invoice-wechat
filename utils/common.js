@@ -1,7 +1,7 @@
 const { wxLogin, wxGetToken } = require('../service/index')
 const { post } = require('../utils/request')
 // 获取openid，如果没有就重新获取
-export async function getOpenid() {
+export async function getopenid() {
   try {
     let openid = wx.getStorageSync('openid')
     if (openid) {
@@ -10,7 +10,7 @@ export async function getOpenid() {
     openid = await wechatLogin()
     return openid
   } catch (e) {
-    console.log('getOpenid fail', e)
+    console.log('getopenid fail', e)
     throw new Error(e)
   }
 }
@@ -57,13 +57,13 @@ export function checkLoginFromWechat() {
   })
 }
 // 通过openid获取用户信息，如果有返回，如果没有返回null
-export async function getUserFromOpenid() {
+export async function getUserFromopenid() {
   try {
     // 获取openid
-    const openid = await getOpenid()
+    const openid = await getopenid()
     // 通过openid获取用户信息
     if(openid) {
-      const res = await post('/api/getUserFromOpenid', { openid })
+      const res = await post('/api/getUserFromopenid', { openid })
       if (res.data) {
         // 如果有存储本地信息
         wx.setStorageSync('currentUser', res.data)
@@ -72,7 +72,7 @@ export async function getUserFromOpenid() {
     }
     return null
   } catch (e) {
-    console.log('getUserFromOpenid fail', e)
+    console.log('getUserFromopenid fail', e)
     throw new Error(e)
   }
 }
@@ -83,7 +83,7 @@ export async function getCurrentUser() {
     if(user) {
       return user
     }
-    user = await getUserFromOpenid()
+    user = await getUserFromopenid()
     return user
   } catch(e) {
     console.log('getCurrentUser fail', e)
@@ -122,7 +122,7 @@ export async function getCompid() {
 // 判断用户是否授权（有openid）和绑定手机号（有phoneNumber）
 export async function checkLoginFromLocal() {
   try {
-    const { openid, phoneNumber } = await getOpenidAndPhoneNumber()
+    const { openid, phoneNumber } = await getopenidAndPhoneNumber()
     if (!openid) {
       wx.showToast({
         title: '请允许微信授权登录',
@@ -143,15 +143,15 @@ export async function checkLoginFromLocal() {
   }
 }
 
-export async function getOpenidAndPhoneNumber() {
+export async function getopenidAndPhoneNumber() {
   try {
-    const pendingOpenid = getOpenid()
+    const pendingopenid = getopenid()
     const pendingPhoneNumber = getPhoneNumber()
-    const openid = await pendingOpenid
+    const openid = await pendingopenid
     const phoneNumber = await pendingPhoneNumber
     return { openid, phoneNumber }
   } catch (e) {
-    console.log('getOpenidAndPhoneNumber fail', e)
+    console.log('getopenidAndPhoneNumber fail', e)
     throw new Error(e)
   }
 }
@@ -163,11 +163,11 @@ export async function getToken() {
     if (token) {
       return token
     }
-    const { openid, phoneNumber } = await getOpenidAndPhoneNumber()
+    const { openid, phoneNumber } = await getopenidAndPhoneNumber()
     if(openid && phoneNumber) {
       const params = {
         userPhone: phoneNumber,
-        openId: openid
+        openid
       }
       const res = await wxGetToken(params)
       if (res && res.token) {

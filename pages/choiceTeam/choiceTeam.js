@@ -1,6 +1,6 @@
 // pages/choiceTeam/choiceTeam.js
 const {getUserList} = require('../../service/index')
-const {getUserFromOpenid, getCompid} = require('../../utils/common')
+const {getUserFromopenid, getCompid} = require('../../utils/common')
 Page({
 
   /**

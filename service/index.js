@@ -17,8 +17,8 @@ export function saveUser(data) {
   return post(api.user, data)
 }
 
-export function getUserFromOpenid(openid) {
-  return post(api.getUserFromOpenid, {openid})
+export function getUserFromopenid(openid) {
+  return post(api.getUserFromopenid, {openid})
 }
 
 export function addUserByCode(data) {

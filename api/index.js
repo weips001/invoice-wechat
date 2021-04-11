@@ -2,7 +2,7 @@ module.exports = {
   bill: '/api/bill',
   user: '/api/user',
   addUserByCode: '/api/addUserByCode',
-  getUserFromOpenid: '/api/getUserFromOpenid',
+  getUserFromopenid: '/api/getUserFromopenid',
   billIsExit: '/api/billIsExit',
   company: '/api/company',
   wxLogin: '/api/wxLogin',
