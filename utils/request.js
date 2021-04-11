@@ -1,7 +1,7 @@
 // const baseUrl = 'http://192.168.3.10:7001'
-const baseUrl = 'http://192.168.3.7:7001'
+// const baseUrl = 'http://192.168.3.7:7001'
 
-// const baseUrl = 'http://39.101.205.84:7001'
+const baseUrl = 'https://cwerp.top'
 
 function request (method) {
   return function (url, data = {}) {

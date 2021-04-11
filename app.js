@@ -1,5 +1,5 @@
 // app.js
-const { wechatLogin, getToken } = require('./utils/common')
+const { wechatLogin, getToken, getCurrentUser } = require('./utils/common')
 App({
   async onLaunch() {
     // 展示本地存储能力
@@ -8,6 +8,7 @@ App({
       logs.unshift(Date.now())
       wx.setStorageSync('logs', logs)
       await wechatLogin()
+      await getCurrentUser(true)
       await getToken()
     } catch(e) {
       console.log('onLaunch fail', e)

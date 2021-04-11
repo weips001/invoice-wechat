@@ -1,12 +1,10 @@
 <view>
   <view class="user">
     <view class="avatar">
-      <open-data wx:if="{{isCheckWe}}" type="userAvatarUrl" class="login-icon"></open-data>
-      <text wx:else class='iconfont icon-nav_icon_avatar_nor no-login-icon'></text>
+      <open-data type="userAvatarUrl" class="login-icon"></open-data>
     </view>
     <view class="login">
-      <button wx:if="{{!isCheckWe}}" plain class="loginBtn" bindtap="getUserProfile">微信授权</button>
-      <button wx:elif="{{isCheckWe && !isCheckPhone}}" plain class="loginBtn" bindtap="inputPhoneNumber">绑定手机号</button>
+      <button wx:if="{{ !isCheckPhone}}" plain class="loginBtn" bindtap="inputPhoneNumber">绑定手机号</button>
       <open-data wx:else type="userNickName" class="name"></open-data>
     </view>
   </view>

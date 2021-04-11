@@ -34,8 +34,11 @@ Page({
       billInfo: {}
     })
   },
-  async save() {
+  async save(jump = true) {
     try {
+      wx.showLoading({
+        title: '数据保存中...',
+      })
       const billInfo = wx.getStorageSync('bill')
       const openid = wx.getStorageSync('openid')
       const params = {
@@ -45,9 +48,16 @@ Page({
         inputMethod: 'phone'
       }
       await saveBill(params)
+      wx.hideLoading()
       wx.showToast({ title: '保存成功' })
+      if(jump) {
+        setTimeout(() => {
+          wx.navigateBack()
+        }, 300)
+      }
     } catch (e) {
       const title = e.msg || '保存失败'
+      wx.hideLoading()
       wx.showToast({
         title,
         icon: 'error',
@@ -56,7 +66,7 @@ Page({
     }
   },
   async saveAndtakeScan() {
-    await this.save()
+    await this.save(false)
     this.resetBill()
     takePhoto('redirect')
   },

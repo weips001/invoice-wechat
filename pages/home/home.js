@@ -11,9 +11,9 @@ Page({
   bindgetuserinfo(e){
     console.log('e', e)
   },
-  async takePhoto() {
+  takePhoto() {
     try {
-      const islogin = await checkLoginFromLocal()
+      const islogin = checkLoginFromLocal()
       if(islogin) {
         takePhoto()
       }

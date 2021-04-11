@@ -77,11 +77,14 @@ export async function getUserFromopenid() {
   }
 }
 
-export async function getCurrentUser() {
+export async function getCurrentUser(refresh = false) {
   try {
-    let user = wx.getStorageSync('currentUser')
-    if(user) {
-      return user
+    let user = ''
+    if(!refresh) {
+      user = wx.getStorageSync('currentUser')
+      if(user) {
+        return user
+      }
     }
     user = await getUserFromopenid()
     return user
@@ -120,17 +123,10 @@ export async function getCompid() {
 }
 
 // 判断用户是否授权（有openid）和绑定手机号（有phoneNumber）
-export async function checkLoginFromLocal() {
+export function checkLoginFromLocal() {
   try {
-    const { openid, phoneNumber } = await getopenidAndPhoneNumber()
-    if (!openid) {
-      wx.showToast({
-        title: '请允许微信授权登录',
-        icon: 'none'
-      })
-      return false
-    }
-    if (!phoneNumber) {
+    const user = wx.getStorageSync('currentUser')
+    if (!(user && user.userPhone)) {
       wx.showToast({
         title: '请输入手机号完成登录',
         icon: 'none'

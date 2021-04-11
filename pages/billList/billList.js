@@ -7,17 +7,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-    list: []
+    list: [],
+    loading: false
   },
-  getPhoneNumber (e) {
-    console.log(e)
-    console.log(e.detail.errMsg)
-    console.log(e.detail.iv)
-    console.log(e.detail.encryptedData)
-  },
-  getList() {
-    getBillList().then(res => {
-      console.log(res)
+  async getList() {
+    try {
+      this.setData({
+        loading: false
+      })
+      wx.showLoading({
+        title: '数据获取中...',
+      })
+      const res = await getBillList()
       const list = res.data.map(item=> {
         return {
           ...item,
@@ -25,9 +26,19 @@ Page({
         }
       })
       this.setData({
-        list
+        list,
+        loading: true
       })
-    })
+      wx.hideLoading()
+    } catch (e) {
+      console.log('getList fail', e)
+      wx.hideLoading()
+      this.setData({
+        list,
+        loading: true
+      })
+    }
+    
   },
   /**
    * 生命周期函数--监听页面加载

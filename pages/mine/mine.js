@@ -7,7 +7,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isCheckWe: false,
     isCheckPhone: false
   },
   async gotoItem(e) {
@@ -33,7 +32,6 @@ Page({
         try {
           const phoneNumber = await getPhoneNumber()
           this.setData({
-            isCheckWe: true,
             isCheckPhone: !!phoneNumber
           })
         } catch (e) {
@@ -54,14 +52,10 @@ Page({
     const user = await getCurrentUser()
     if(user) {
       this.setData({
-        isCheckWe: true,
         isCheckPhone: !!user.userPhone
       })
       return false
     }
-    this.setData({
-      isCheckWe: false,
-    })
   },
   inputPhoneNumber() {
     wx.navigateTo({

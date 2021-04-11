@@ -11,15 +11,30 @@ page {
   /* width: 90%; */
   background-color: #fff;
   border-radius: 8rpx;
-  padding: 4rpx;
+  padding: 8px;
   margin-bottom: 20rpx;
 }
 .time {
-  text-align: right;
-  font-size: 10px;
+  /* text-align: right; */
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: bold;
+  color: #9c9c9c;
+}
+.idx {
+  font-size: 14px;
 }
 .info {
-  font-size: 12px;
+  font-size: 18px;
+}
+.key {
+  font-size: 16px;
+  display: inline-block;
+  width: 100px;
+  color: #9c9c9c;
+  text-align: justify;
+  text-align-last: justify;
 }
 .empty {
   height: 240rpx;
